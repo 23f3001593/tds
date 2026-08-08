@@ -1,15 +1,30 @@
-name: TDS Task Action
+name: Scrape Table Sums
 
 on:
-  push:
-    branches:
-      - main
-      - master
   workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
-  test:
+  scrape:
     runs-on: ubuntu-latest
     steps:
-      - name: 23f3001593@ds.study.iitm.ac.in
-        run: echo "Hello, world!"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        working-directory: mix/uv
+        run: npm install
+
+      - name: Install Playwright browsers
+        working-directory: mix/uv
+        run: npx playwright install --with-deps chromium
+
+      - name: Run scraper for 23f3001593@ds.study.iitm.ac.in
+        working-directory: mix/uv
+        run: node scrape.js
