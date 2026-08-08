@@ -1,0 +1,30 @@
+name: Scrape Table Sums
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        working-directory: root/mix/uv
+        run: npm install
+
+      - name: Install Playwright browsers
+        working-directory: root/mix/uv
+        run: npx playwright install --with-deps chromium
+
+      - name: Run scraper for 23f3001593@ds.study.iitm.ac.in
+        working-directory: root/mix/uv
+        run: node scrape.js
