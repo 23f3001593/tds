@@ -1,0 +1,35 @@
+name: TDS GA7 Release Gate
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test release-gate policy endpoint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: uv
+
+    steps:
+      - name: "TDS identity: 23f3001593@ds.study.iitm.ac.in"
+        run: echo "23f3001593@ds.study.iitm.ac.in"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run policy test suite
+        run: npm test
